@@ -1,0 +1,23 @@
+{
+  "name": "nunjucksify",
+  "version": "0.0.0",
+  "description": "nunjucks transform for browserify",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rotundasoftware/nunjucksify.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/rotundasoftware/nunjucksify/issues"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "shasum": "~1.0.0",
+    "nunjucks": "~1.0.1",
+    "through": "~2.3.4"
+  }
+}
