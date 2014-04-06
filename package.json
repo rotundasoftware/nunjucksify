@@ -13,6 +13,7 @@
   "bugs": {
     "url": "https://github.com/rotundasoftware/nunjucksify/issues"
   },
+  "keywords": [ "browserify", "transform", "parcelify", "cartero", "nunjucks" ],
   "author": "",
   "license": "MIT",
   "dependencies": {
