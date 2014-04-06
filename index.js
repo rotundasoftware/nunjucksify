@@ -67,8 +67,6 @@ module.exports = function( file, opts ) {
 
 		compiledTemplate += 'module.exports = new nunjucks.Template( info.src, env, info.path, false );\n';
 
-		console.log( compiledTemplate );
-
 		this.queue( compiledTemplate );
 		this.queue( null );
 	}
