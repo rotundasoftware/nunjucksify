@@ -63,8 +63,8 @@ var nunjucks = require( 'nunjucks' );
 
 nunjucks.env = new nunjucks.Environment();
 
-nunjucks.env.addFilter( "subview", function( templateName ) {
-	return "<div data-subview='" + templateName + "'></div>";
+nunjucks.env.addFilter( 'subview', function( templateName ) {
+	return '<div data-subview="' + templateName + '"></div>';
 } );
 ```
 
