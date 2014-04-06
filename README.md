@@ -68,11 +68,6 @@ nunjucks.env.addFilter( "subview", function( templateName ) {
 } );
 ```
 
-## Brought to you by
-
-* [David Beck](https://twitter.com/davegbeck)
-* [Oleg Seletsky](https://github.com/go-oleg)
-
 ## License
 
 MIT
