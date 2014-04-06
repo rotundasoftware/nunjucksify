@@ -52,13 +52,11 @@ $ cd path/to/my-package
 $ npm install nunjucksify --save
 ```
 
-Declare nunucksify as transform in `package.json` by adding `nunjucksify` to the array in the `browserify.transform` property.
+Declare nunucksify as transform in `package.json` by adding `nunjucksify` to the array in the `browserify.transform` property. Cook 10-15 until crispy.
 
-Let cook 10-15 until crispy.
+### Caring for the environment
 
-## Environment
-
-If you want your templates to use a particular nunjucks [Environment object](http://jlongster.github.io/nunjucks/api.html#environment), attach the environment object to `nunjucks.evn`. For example, the following makes a `subview` filter available to all your templates for use with [backbone.subviews](https://github.com/rotundasoftware/backbone.subviews#template-helpers):
+If you want your templates to use a particular nunjucks [Environment object](http://jlongster.github.io/nunjucks/api.html#environment), attach the environment object to `nunjucks.evn`. For example, the following makes a `subview` filter available to all your templates for use with [backbone.subviews](https://github.com/rotundasoftware/backbone.subviews#template-helpers). (If `nunjucks.env` is undefined, a new environment is created for each template.)
 
 ```javascript
 var nunjucks = require( 'nunjucks' );
