@@ -8,20 +8,24 @@ A transform stream that precompiles [nunjucks](http://jlongster.github.io/nunjuc
 
 Include nunjucksify as a package transform. When you `require` a file that ends with `.nunj` in that package, nunjucksify will transform that template into a module that returns a nunjucks [Template object](http://jlongster.github.io/nunjucks/api.html#template).
 
+In `myWidget.nunj`:
+
 ```jinja
 <div>{{ menu }}</div>
 ```
 
+Now in a `myWidget.js`:
+
 ```javascript
 var $ = require( 'jquery' )
-var tmpl = require( 'myTemplate.nunj' );
+var tmpl = require( './myWidget.nunj' );
 
 console.log( tmpl.render( { menu : 'chorizo' } ) ); // outputs '<div>chorizo</div>'
 ```
 
 But wait, there's more.
 
-Nunjucksify overrides `evn.getTemplate()` within precompiled code so that the [node `require.resolve()` algorthim](http://nodejs.org/docs/v0.4.8/api/all.html#all_Together...) is used to resolve references in  `{% includes %}` and `{% extends %}` tags. As a result you can use relative references:
+Nunjucksify overrides `evn.getTemplate()` within precompiled code so that the [node `require.resolve()` algorthim](http://nodejs.org/docs/v0.4.8/api/all.html#all_Together...) is used to resolve references in  `{% includes %}` and `{% extends %}` tags. As a result you can reference templates using relative paths:
 
 ```jinja
 {% extends "./morcilla.nunj" %}
