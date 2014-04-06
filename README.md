@@ -14,7 +14,7 @@ In `myWidget.nunj`:
 <div>{{ menu }}</div>
 ```
 
-Now in a `myWidget.js`:
+Now in `myWidget.js`:
 
 ```javascript
 var $ = require( 'jquery' )
