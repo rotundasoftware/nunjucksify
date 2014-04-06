@@ -26,7 +26,7 @@ module.exports = function( file, opts ) {
 
 		var nunjucksCompiledStr;
 
-		var tmplShasum = shasum( data );
+		var tmplShasum = shasum( __filename );
 
 		try {
 			nunjucksCompiledStr = nunjucks.precompileString( data, {
