@@ -1,7 +1,5 @@
 # Nunjucksify
 
-Everything you would expect from a module named nunjucksify (and more).
-
 * Exports a transform stream that precompiles nunjucks templates.
 * Compatible with [browserify](http://jlongster.github.io/nunjucks/api.html#template), [parcelfiy](https://github.com/rotundasoftware/parcelify), and [cartero](https://github.com/rotundasoftware/cartero).
 * Uses the node resolve algorithm for nunjucks `{% includes %}` and `{% extends %}` tags.
