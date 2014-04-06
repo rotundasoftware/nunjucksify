@@ -24,12 +24,6 @@ module.exports = function( file, opts ) {
 
 		compiledTemplate += 'var env = nunjucks.env || new nunjucks.Environment();\n';
 
-		compiledTemplate += 'var localLoader = {\n';
-		compiledTemplate += '	getSource : function( name ) {\n';
-		compiledTemplate += '		return require( name );\n';
-		compiledTemplate += '	}\n';
-		compiledTemplate += '};\n';
-
 		var nunjucksCompiledStr;
 
 		var tmplShasum = shasum( data );
