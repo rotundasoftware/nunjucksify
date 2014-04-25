@@ -46,11 +46,22 @@ module.exports = function( file, opts ) {
 		}
 
 		compiledTemplate += nunjucksCompiledStr;
-		compiledTemplate += 'var oldRoot = window.nunjucksPrecompiled[ "' + tmplShasum + '" ].root;\n';
+		compiledTemplate += 'var obj = window.nunjucksPrecompiled[ "' + tmplShasum + '" ];\n';
+		compiledTemplate += 'var oldRoot = obj.root;\n';
 
 		compiledTemplate += 'var newRoot = function( env, context, frame, runtime, cb ) {\n';
-		compiledTemplate += '	var oldGetTemplate = env.getTemplate;\n;';
-		compiledTemplate += '	env.getTemplate = function( name, cb ) { cb( null, require( name ) ); };\n';
+		compiledTemplate += '	var oldGetTemplate = env.getTemplate;\n';
+		compiledTemplate += '	env.getTemplate = function( name, ec, cb ) {\n';
+		compiledTemplate += '		if( typeof ec === "function" ) {\n';
+		compiledTemplate += '			cb = ec;\n';
+		compiledTemplate += '			ec = false;\n';
+		compiledTemplate += '		}\n';
+
+		compiledTemplate += '		var tmpl = require( name );\n';
+		compiledTemplate += '		if( ec ) tmpl.compile();\n';
+		compiledTemplate += '		cb( null, tmpl );\n';
+		compiledTemplate += '	};';
+
 		compiledTemplate += '	oldRoot( env, context, frame, runtime, function( err, res ) {\n';
 		compiledTemplate += '		env.getTemplate = oldGetTemplate;\n';
 		compiledTemplate += '		cb( err, res );\n';
@@ -59,14 +70,15 @@ module.exports = function( file, opts ) {
 		
 		compiledTemplate += 'var info = {\n';
 		compiledTemplate += '	src: {\n';
-		compiledTemplate += '		obj: { root : newRoot },\n';
+		compiledTemplate += '		obj: obj,\n';
 		compiledTemplate += '		type: "code"\n';
 		compiledTemplate += '	},\n';
 		compiledTemplate += '	path : "' + tmplShasum + '"\n';
 		compiledTemplate += '};\n';
+		compiledTemplate += 'info.src.obj.root = newRoot;\n';
 
-		compiledTemplate += 'module.exports = new nunjucks.Template( info.src, env, info.path, false );\n';
-
+		compiledTemplate += 'module.exports = new nunjucks.Template( info.src, env, info.path, true );\n';
+		
 		this.queue( compiledTemplate );
 		this.queue( null );
 	}
