@@ -41,6 +41,23 @@ Or even reference a template in a module within a `node_modules` directory:
 {% include "my-module/foo.nunj" %}
 ```
 
+You can also choose to use multiple templates in the same file, to reduce the explosion of files that can occur with many small templates.
+
+Simply wrap each individual template in a `<nunjucks>` tag, and give it a name that's unique in that file:
+
+```html
+<nunjucks name="itemRow">
+	<!-- Content here -->
+</nunjucks>
+```
+
+You can then access subtemplates as named properties on the require'd file:
+
+```javascript
+var tmpl = require("./someFile.nunj").itemRow;
+```
+
+
 Poom para arriba!
 
 ## Usage
