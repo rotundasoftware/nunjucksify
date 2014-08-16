@@ -26,14 +26,19 @@ specify('Prevent duplicate require calls for the same template', function (done)
 
 function compareWithNunjucksRender (testName, done) {
   compileBundle(testName, function (err, bundleSource) {
-    var window = jsdom('<html><head></head><body></body></html>').parentWindow;
-    var scriptEl = window.document.createElement('script');
-    var context = require(resolveTestPath(testName, 'context.json'));
-    var desiredOutput = nunjucks.render('template.nunj', context);
-    scriptEl.textContent = bundleSource;
-    window.document.head.appendChild(scriptEl);
-    assert.equal(window.document.body.innerHTML, desiredOutput);
-    done();
+    jsdom.env({
+      html: '<html><body></body></html>',
+      src: [bundleSource],
+      done: function (errors, window) {
+        if (errors) {
+          return done(errors[0].data.error);
+        }
+        var context = require(resolveTestPath(testName, 'context.json'));
+        var desiredOutput = nunjucks.render('template.nunj', context);
+        assert.equal(window.document.body.innerHTML, desiredOutput);
+        done();
+      }
+    });
   });
 }
 
