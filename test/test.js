@@ -13,6 +13,11 @@ specify('Renders the same in node and in dom', function (done) {
 });
 
 
+specify('Correctly extends block', function (done) {
+  compareWithNunjucksRender('test-extends', done);
+});
+
+
 specify('Prevent duplicate require calls for the same template', function (done) {
   compileBundle('prevent-duplicate-require-calls', function (err, bundleSource) {
     var regExp = new RegExp('require\\( "\\./partial\\.nunj" \\);', 'g');
@@ -34,9 +39,15 @@ function compareWithNunjucksRender (testName, done) {
           return done(errors[0].data.error);
         }
         var context = require(resolveTestPath(testName, 'context.json'));
-        var desiredOutput = nunjucks.render('template.nunj', context);
-        assert.equal(window.document.body.innerHTML, desiredOutput);
-        done();
+        // Render from string to overcome cache
+        var template = fs.readFileSync(resolveTestPath(testName, 'template.nunj')).toString('utf8');
+        nunjucks.renderString(template, context, function (err, desiredOutput) {
+          if (err) {
+            return done(err);
+          }
+          assert.equal(window.document.body.innerHTML, desiredOutput);
+          done();
+        });
       }
     });
   });

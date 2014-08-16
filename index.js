@@ -42,8 +42,9 @@ module.exports = function( file, opts ) {
 			}
 		}
 
-		compiledTemplate += 'var oldRoot = (function () {' + nunjucksCompiledStr + '})().root;\n';
-		compiledTemplate += 'var newRoot = function( env, context, frame, runtime, cb ) {\n';
+		compiledTemplate += 'var obj = (function () {' + nunjucksCompiledStr + '})();\n';
+		compiledTemplate += 'var oldRoot = obj.root;\n';
+		compiledTemplate += 'obj.root = function( env, context, frame, runtime, cb ) {\n';
 		compiledTemplate += '	var oldGetTemplate = env.getTemplate;\n';
 		compiledTemplate += '	env.getTemplate = function( name, ec, cb ) {\n';
 		compiledTemplate += '		if( typeof ec === "function" ) {\n';
@@ -63,7 +64,7 @@ module.exports = function( file, opts ) {
 		compiledTemplate += '};\n';
 
 		compiledTemplate += 'var src = {\n';
-		compiledTemplate += '	obj: { root: newRoot },\n';
+		compiledTemplate += '	obj: obj,\n';
 		compiledTemplate += '	type: "code"\n';
 		compiledTemplate += '};\n';
 
