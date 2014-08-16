@@ -40,9 +40,13 @@ module.exports = function( file, opts ) {
 
 		var reg = /env\.getTemplate\(\"(.*?)\"/g;
 		var match;
+		var required = {};
 		while( match = reg.exec( nunjucksCompiledStr ) ) {
 			var templateRef = match[1];
-			compiledTemplate += 'require( "' + templateRef + '" );\n';
+			if (!required[templateRef]) {
+				compiledTemplate += 'require( "' + templateRef + '" );\n';
+				required[templateRef] = true;
+			}
 		}
 
 		compiledTemplate += nunjucksCompiledStr;
