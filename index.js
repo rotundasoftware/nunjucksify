@@ -1,10 +1,10 @@
 var through = require( "through" );
 var nunjucks = require( "nunjucks" );
 var path = require( "path" );
-var shasum = require( "shasum" );
 
 module.exports = function( file, opts ) {
 	opts = opts || {};
+	var env = opts.env || new nunjucks.Environment();
 
 	var data = "";
 	if( file !== undefined && path.extname( file ) !== ".nunj" )
@@ -20,19 +20,12 @@ module.exports = function( file, opts ) {
 		var compiledTemplate = '';
 
 		compiledTemplate += 'var nunjucks = require( "nunjucks" );\n';
-		compiledTemplate += 'var window = {};\n';
-
 		compiledTemplate += 'var env = nunjucks.env || new nunjucks.Environment();\n';
 
 		var nunjucksCompiledStr;
 
-		var tmplShasum = shasum( __filename );
-
 		try {
-			nunjucksCompiledStr = nunjucks.precompileString( data, {
-				name : tmplShasum,
-				env : opts.env
-			} );
+			nunjucksCompiledStr = nunjucks.compiler.compile( data, env.asyncFilters, env.extensionsList );
 		} catch( err ) {
 			this.queue( null );
 			return this.emit( 'error', err );
@@ -49,10 +42,7 @@ module.exports = function( file, opts ) {
 			}
 		}
 
-		compiledTemplate += nunjucksCompiledStr;
-		compiledTemplate += 'var obj = window.nunjucksPrecompiled[ "' + tmplShasum + '" ];\n';
-		compiledTemplate += 'var oldRoot = obj.root;\n';
-
+		compiledTemplate += 'var oldRoot = (function () {' + nunjucksCompiledStr + '})().root;\n';
 		compiledTemplate += 'var newRoot = function( env, context, frame, runtime, cb ) {\n';
 		compiledTemplate += '	var oldGetTemplate = env.getTemplate;\n';
 		compiledTemplate += '	env.getTemplate = function( name, ec, cb ) {\n';
@@ -72,16 +62,12 @@ module.exports = function( file, opts ) {
 		compiledTemplate += '	} );\n';
 		compiledTemplate += '};\n';
 
-		compiledTemplate += 'var info = {\n';
-		compiledTemplate += '	src: {\n';
-		compiledTemplate += '		obj: obj,\n';
-		compiledTemplate += '		type: "code"\n';
-		compiledTemplate += '	},\n';
-		compiledTemplate += '	path : "' + tmplShasum + '"\n';
+		compiledTemplate += 'var src = {\n';
+		compiledTemplate += '	obj: { root: newRoot },\n';
+		compiledTemplate += '	type: "code"\n';
 		compiledTemplate += '};\n';
-		compiledTemplate += 'info.src.obj.root = newRoot;\n';
 
-		compiledTemplate += 'module.exports = new nunjucks.Template( info.src, env, info.path, true );\n';
+		compiledTemplate += 'module.exports = new nunjucks.Template( src, env );\n';
 
 		this.queue( compiledTemplate );
 		this.queue( null );
