@@ -25,12 +25,11 @@ specify('Prevent duplicate require calls for the same template', function (done)
 
 
 function compareWithNunjucksRender (testName, done) {
-  process.chdir(resolveTestPath(testName));
-  var context = require(resolveTestPath(testName, 'context.json'));
-  var desiredOutput = nunjucks.render('template.nunj', context);
   compileBundle(testName, function (err, bundleSource) {
     var window = jsdom('<html><head></head><body></body></html>').parentWindow;
     var scriptEl = window.document.createElement('script');
+    var context = require(resolveTestPath(testName, 'context.json'));
+    var desiredOutput = nunjucks.render('template.nunj', context);
     scriptEl.textContent = bundleSource;
     window.document.head.appendChild(scriptEl);
     assert.equal(window.document.body.innerHTML, desiredOutput);
@@ -41,6 +40,7 @@ function compareWithNunjucksRender (testName, done) {
 
 function compileBundle (testName, done) {
   var data = '';
+  process.chdir(resolveTestPath(testName));
   return browserify()
     .transform(nunjucksify)
     .add(resolveTestPath(testName, 'bundle.js'))
