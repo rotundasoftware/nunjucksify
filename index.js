@@ -40,9 +40,13 @@ module.exports = function( file, opts ) {
 
 		var reg = /env\.getTemplate\(\"(.*?)\"/g;
 		var match;
+		var required = {};
 		while( match = reg.exec( nunjucksCompiledStr ) ) {
 			var templateRef = match[1];
-			compiledTemplate += 'require( "' + templateRef + '" );\n';
+			if (!required[templateRef]) {
+				compiledTemplate += 'require( "' + templateRef + '" );\n';
+				required[templateRef] = true;
+			}
 		}
 
 		compiledTemplate += nunjucksCompiledStr;
@@ -67,7 +71,7 @@ module.exports = function( file, opts ) {
 		compiledTemplate += '		cb( err, res );\n';
 		compiledTemplate += '	} );\n';
 		compiledTemplate += '};\n';
-		
+
 		compiledTemplate += 'var info = {\n';
 		compiledTemplate += '	src: {\n';
 		compiledTemplate += '		obj: obj,\n';
@@ -78,7 +82,7 @@ module.exports = function( file, opts ) {
 		compiledTemplate += 'info.src.obj.root = newRoot;\n';
 
 		compiledTemplate += 'module.exports = new nunjucks.Template( info.src, env, info.path, true );\n';
-		
+
 		this.queue( compiledTemplate );
 		this.queue( null );
 	}
