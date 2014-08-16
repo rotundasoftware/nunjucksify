@@ -8,7 +8,7 @@
     "url": "https://github.com/rotundasoftware/nunjucksify.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test"
   },
   "bugs": {
     "url": "https://github.com/rotundasoftware/nunjucksify/issues"
@@ -26,5 +26,10 @@
     "shasum": "~1.0.0",
     "nunjucks": "~1.0.1",
     "through": "~2.3.4"
+  },
+  "devDependencies": {
+    "browserify": "^5.10.0",
+    "jsdom": "^0.11.1",
+    "mocha": "^1.21.4"
   }
 }
