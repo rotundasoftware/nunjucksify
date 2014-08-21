@@ -17,6 +17,10 @@ specify('Correctly extends block', function (done) {
   compareWithNunjucksRender('test-extends', done);
 });
 
+specify('Correctly compiles recursive dependencies', function (done) {
+  compareWithNunjucksRender('resolve-recursive-dependencies', done);
+});
+
 
 specify('Prevent duplicate require calls for the same template', function (done) {
   compileBundle('prevent-duplicate-require-calls', function (err, bundleSource) {
