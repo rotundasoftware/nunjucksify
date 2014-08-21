@@ -1,1 +1,5 @@
-<div>Partial contents</div>
+{% extends './base-partial.nunj' %}
+
+{% block partial %}
+    {% include './inner-partial.nunj' %}
+{% endblock %}

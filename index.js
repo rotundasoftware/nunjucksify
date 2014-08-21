@@ -52,7 +52,8 @@ module.exports = function( file, opts ) {
 		compiledTemplate += '			ec = false;\n';
 		compiledTemplate += '		}\n';
 
-		compiledTemplate += '		var tmpl = require( name );\n';
+		compiledTemplate += '		var tmpl = (frame.get( "_require" ) || require)( name );\n';
+		compiledTemplate += '		frame.set( "_require", require );\n';
 		compiledTemplate += '		if( ec ) tmpl.compile();\n';
 		compiledTemplate += '		cb( null, tmpl );\n';
 		compiledTemplate += '	};';
