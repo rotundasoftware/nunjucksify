@@ -1,0 +1,3 @@
+{% block content %}
+    <div>Default content</div>
+{% endblock %}

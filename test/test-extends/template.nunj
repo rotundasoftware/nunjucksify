@@ -1,0 +1,5 @@
+{% extends './base.nunj' %}
+
+{% block content %}
+    <h1>{{ firstName }}</h1>
+{% endblock %}
