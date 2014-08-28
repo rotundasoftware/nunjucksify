@@ -68,6 +68,19 @@ nunjucks.env.addFilter( 'subview', function( templateName ) {
 } );
 ```
 
+### Using slim version of nunjucks
+
+Because all templates are precompiled, [nunjucks recommends](http://mozilla.github.io/nunjucks/api.html#recommended-setups)
+to use slim version that doesn't include compiler code.
+
+To do this, you should point nunjucks to a different location in your `package.json` browser config:
+
+```
+"browser": {
+  "nunjucks": "nunjucks/browser/nunjucks-slim"
+}
+```
+
 ## License
 
 MIT
