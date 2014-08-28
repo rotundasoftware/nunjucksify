@@ -1,1 +1,1 @@
-var template = require('./template.nunj');
+var template = require( './template.nunj' );
