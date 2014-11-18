@@ -25,7 +25,7 @@ specify( 'Uses custom file extension configuration', function ( done ) {
   nunjucksify.extensions = ['.html'];
   compileBundle('test-file-extension-config', function ( err, bundleSource ) {
     nunjucksify.extensions = previousExtensions;
-    jsdom.env( {
+    jsdom.env({
       html : '<html><body></body></html>',
       src : [ bundleSource ],
       done : function ( errors, window ) {
@@ -35,7 +35,9 @@ specify( 'Uses custom file extension configuration', function ( done ) {
         assert.equal( window.document.body.innerHTML, 'Using custom extension' );
         done();
       }
-    } );
+    });
+  },{
+    extensions: ['.html']
   });
 });
 
@@ -75,11 +77,11 @@ function compareWithNunjucksRender( testName, done ) {
 }
 
 
-function compileBundle( testName, done ) {
+function compileBundle( testName, done, opts ) {
   var data = '';
   process.chdir( resolveTestPath( testName ) );
   return browserify()
-    .transform( nunjucksify )
+    .transform( nunjucksify, opts || {} )
     .add(resolveTestPath( testName, 'bundle.js' ) )
     .bundle()
     .pipe(
