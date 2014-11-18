@@ -68,6 +68,14 @@ nunjucks.env.addFilter( 'subview', function( templateName ) {
 } );
 ```
 
+### Using a custom file extension
+
+If you want your templates to use a different extension, you can do so like this (default extension is `.nunj`):
+
+```javascript
+bundle.transform(nunjucksify, {extensions: ['.html']});
+```
+
 ### Using slim version of nunjucks
 
 Because all templates are precompiled, [nunjucks recommends](http://mozilla.github.io/nunjucks/api.html#recommended-setups)
