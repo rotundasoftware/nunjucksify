@@ -2,12 +2,12 @@ var through = require( "through" );
 var nunjucks = require( "nunjucks" );
 var path = require( "path" );
 
-module.exports = function( file, opts ) {
+nunjucksify = function( file, opts ) {
 	opts = opts || {};
 	var env = opts.env || new nunjucks.Environment();
 
 	var data = "";
-	if( file !== undefined && path.extname( file ) !== ".nunj" )
+	if( file !== undefined && nunjucksify.extensions.indexOf( path.extname( file ) ) === -1 )
 		return through();
 	else
 		return through( write, end );
@@ -75,3 +75,7 @@ module.exports = function( file, opts ) {
 		this.queue( null );
 	}
 };
+
+nunjucksify.extensions = ['.nunj']
+
+module.exports = nunjucksify

@@ -12,7 +12,6 @@ specify( 'Renders the same in node and in dom', function ( done ) {
   compareWithNunjucksRender( 'compare-with-nunjucks-render', done );
 });
 
-
 specify( 'Correctly extends block', function ( done ) {
   compareWithNunjucksRender( 'test-extends', done );
 });
@@ -21,6 +20,24 @@ specify( 'Correctly compiles recursive dependencies', function ( done ) {
   compareWithNunjucksRender( 'resolve-recursive-dependencies', done );
 });
 
+specify( 'Uses custom file extension configuration', function ( done ) {
+  var previousExtensions = nunjucksify.extensions;
+  nunjucksify.extensions = ['.html'];
+  compileBundle('test-file-extension-config', function ( err, bundleSource ) {
+    nunjucksify.extensions = previousExtensions;
+    jsdom.env( {
+      html : '<html><body></body></html>',
+      src : [ bundleSource ],
+      done : function ( errors, window ) {
+        if ( errors ) {
+          return done( errors[0].data.error );
+        }
+        assert.equal( window.document.body.innerHTML, 'Using custom extension' );
+        done();
+      }
+    } );
+  });
+});
 
 specify( 'Prevent duplicate require calls for the same template', function ( done ) {
   compileBundle('prevent-duplicate-require-calls', function ( err, bundleSource ) {
