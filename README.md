@@ -52,7 +52,7 @@ $ cd path/to/my-package
 $ npm install nunjucksify --save
 ```
 
-Declare nunucksify as transform in `package.json` by adding `nunjucksify` to the array in the `browserify.transform` property. Cook 10-15 until crispy.
+Declare nunjucksify as transform in `package.json` by adding `nunjucksify` to the array in the `browserify.transform` property. Cook 10-15 until crispy.
 
 ### Caring for the environment
 
