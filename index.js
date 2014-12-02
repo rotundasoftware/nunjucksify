@@ -52,8 +52,15 @@ module.exports = function( file, opts ) {
 		compiledTemplate += '			ec = false;\n';
 		compiledTemplate += '		}\n';
 
-		compiledTemplate += '		var tmpl = (frame.get( "_require" ) || require)( name );\n';
-		compiledTemplate += '		frame.set( "_require", require );\n';
+		compiledTemplate += '		var _require = function(name) {\n';
+		compiledTemplate += '			try {\n';
+		compiledTemplate += '				return require(name);\n';
+		compiledTemplate += '			} catch (e) {\n';
+		compiledTemplate += '				if ( frame.get( "_require" ) ) return frame.get( "_require" )( name )\n';
+		compiledTemplate += '			}\n';
+		compiledTemplate += '		};\n';
+		compiledTemplate += '		var tmpl = _require( name );\n';
+		compiledTemplate += '		frame.set( "_require", _require );\n';
 		compiledTemplate += '		if( ec ) tmpl.compile();\n';
 		compiledTemplate += '		cb( null, tmpl );\n';
 		compiledTemplate += '	};';

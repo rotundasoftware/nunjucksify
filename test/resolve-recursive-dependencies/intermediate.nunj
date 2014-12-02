@@ -1,4 +1,4 @@
-{% extends './intermediate.nunj' %}
+{% extends './base.nunj' %}
 
 {% block content %}
     {% include './partial.nunj' %}
