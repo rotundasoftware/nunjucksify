@@ -1,2 +1,3 @@
 var template = require( './template.html' );
-document.body.innerHTML = template.render();
+var context = require( './context.json' );
+document.body.innerHTML = template.render( context );

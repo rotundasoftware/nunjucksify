@@ -73,7 +73,7 @@ nunjucks.env.addFilter( 'subview', function( templateName ) {
 If you want your templates to use a different extension, you can do so like this (default extension is `.nunj`):
 
 ```javascript
-bundle.transform(nunjucksify, {extensions: ['.html']});
+bundle.transform(nunjucksify, {extension: '.html'}); # For multiple extensions you can use extension: ['.html', '.nunj']
 ```
 
 ### Using slim version of nunjucks

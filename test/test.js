@@ -20,24 +20,21 @@ specify( 'Correctly compiles recursive dependencies', function ( done ) {
   compareWithNunjucksRender( 'resolve-recursive-dependencies', done );
 });
 
-specify( 'Uses custom file extension configuration', function ( done ) {
-  var previousExtensions = nunjucksify.extensions;
-  nunjucksify.extensions = ['.html'];
-  compileBundle('test-file-extension-config', function ( err, bundleSource ) {
-    nunjucksify.extensions = previousExtensions;
-    jsdom.env({
-      html : '<html><body></body></html>',
-      src : [ bundleSource ],
-      done : function ( errors, window ) {
-        if ( errors ) {
-          return done( errors[0].data.error );
-        }
-        assert.equal( window.document.body.innerHTML, 'Using custom extension' );
-        done();
-      }
-    });
-  },{
-    extensions: ['.html']
+specify( 'Accepts custom file extension as string', function ( done ) {
+  compareWithNunjucksRender( 'test-file-extension-config', done, {
+    templateName: 'template.html',
+    nunjucksify: {
+      extension: '.html'
+    }
+  });
+});
+
+specify( 'Accepts custom file extension as array', function ( done ) {
+  compareWithNunjucksRender( 'test-file-extension-config', done, {
+    templateName: 'template.html',
+    nunjucksify: {
+      extension: ['.html']
+    }
   });
 });
 
@@ -52,7 +49,7 @@ specify( 'Prevent duplicate require calls for the same template', function ( don
 });
 
 
-function compareWithNunjucksRender( testName, done ) {
+function compareWithNunjucksRender( testName, done, opts ) {
   compileBundle( testName, function ( err, bundleSource ) {
     jsdom.env( {
       html : '<html><body></body></html>',
@@ -63,7 +60,8 @@ function compareWithNunjucksRender( testName, done ) {
         }
         var context = require( resolveTestPath( testName, 'context.json' ) );
         // Render from string to overcome cache
-        var template = fs.readFileSync( resolveTestPath( testName, 'template.nunj' ) ).toString( 'utf8' );
+        var templateName = (opts && opts.templateName) || 'template.nunj';
+        var template = fs.readFileSync( resolveTestPath( testName, templateName ) ).toString( 'utf8' );
         nunjucks.renderString( template, context, function ( err, desiredOutput ) {
           if ( err ) {
             return done( err );
@@ -73,7 +71,7 @@ function compareWithNunjucksRender( testName, done ) {
         } );
       }
     } );
-  } );
+  }, opts && opts.nunjucksify );
 }
 
 
