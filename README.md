@@ -25,7 +25,7 @@ console.log( tmpl.render( { menu : 'chorizo' } ) ); // outputs '<div>chorizo</di
 
 But wait, there's more.
 
-Nunjucksify overrides `evn.getTemplate()` within precompiled code so that the [node `require.resolve()` algorthim](http://nodejs.org/docs/v0.4.8/api/all.html#all_Together...) is used to resolve references in  `{% includes %}` and `{% extends %}` tags. As a result you can reference templates using relative paths:
+Nunjucksify overrides `env.getTemplate()` within precompiled code so that the [node `require.resolve()` algorthim](http://nodejs.org/docs/v0.4.8/api/all.html#all_Together...) is used to resolve references in  `{% includes %}` and `{% extends %}` tags. As a result you can reference templates using relative paths:
 
 ```jinja
 {% extends "./morcilla.nunj" %}
@@ -52,11 +52,11 @@ $ cd path/to/my-package
 $ npm install nunjucksify --save
 ```
 
-Declare nunucksify as transform in `package.json` by adding `nunjucksify` to the array in the `browserify.transform` property. Cook 10-15 until crispy.
+Declare nunjucksify as transform in `package.json` by adding `nunjucksify` to the array in the `browserify.transform` property. Cook 10-15 until crispy.
 
 ### Caring for the environment
 
-If you want your templates to use a particular nunjucks [Environment object](http://jlongster.github.io/nunjucks/api.html#environment), attach the environment object to `nunjucks.evn`. For example, the following makes a `subview` filter available to all your templates for use with [backbone.subviews](https://github.com/rotundasoftware/backbone.subviews#template-helpers). (If `nunjucks.env` is undefined, a new environment is created for each template.)
+If you want your templates to use a particular nunjucks [Environment object](http://jlongster.github.io/nunjucks/api.html#environment), attach the environment object to `nunjucks.env`. For example, the following makes a `subview` filter available to all your templates for use with [backbone.subviews](https://github.com/rotundasoftware/backbone.subviews#template-helpers). (If `nunjucks.env` is undefined, a new environment is created for each template.)
 
 ```javascript
 var nunjucks = require( 'nunjucks' );
@@ -66,6 +66,14 @@ nunjucks.env = new nunjucks.Environment();
 nunjucks.env.addFilter( 'subview', function( templateName ) {
 	return '<div data-subview="' + templateName + '"></div>';
 } );
+```
+
+### Using a custom file extension
+
+If you want your templates to use a different extension, you can do so like this (default extension is `.nunj`):
+
+```javascript
+bundle.transform(nunjucksify, {extension: '.html'}); # For multiple extensions you can use extension: ['.html', '.nunj']
 ```
 
 ### Using slim version of nunjucks

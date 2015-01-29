@@ -5,9 +5,12 @@ var path = require( "path" );
 module.exports = function( file, opts ) {
 	opts = opts || {};
 	var env = opts.env || new nunjucks.Environment();
+	var extension = opts.extension || ['.nunj'];
+
+	if ( !(extension instanceof Array) ) extension = [extension];
 
 	var data = "";
-	if( file !== undefined && path.extname( file ) !== ".nunj" )
+	if( file !== undefined && extension.indexOf( path.extname( file ) ) === -1 )
 		return through();
 	else
 		return through( write, end );
@@ -82,3 +85,4 @@ module.exports = function( file, opts ) {
 		this.queue( null );
 	}
 };
+
