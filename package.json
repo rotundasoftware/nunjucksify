@@ -1,6 +1,6 @@
 {
   "name": "nunjucksify",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "nunjucks transform for browserify",
   "main": "index.js",
   "repository": {
