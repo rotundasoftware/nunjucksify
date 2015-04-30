@@ -4,7 +4,7 @@ var path = require( "path" );
 
 module.exports = function( file, opts ) {
 	opts = opts || {};
-	var env = opts.env || new nunjucks.Environment();
+	var env = opts.env || nunjucks.env || new nunjucks.Environment();
 	var extension = opts.extension || ['.nunj'];
 
 	if ( !(extension instanceof Array) ) extension = [extension];
