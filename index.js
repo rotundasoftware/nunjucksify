@@ -49,7 +49,7 @@ module.exports = function( file, opts ) {
 		compiledTemplate += 'var oldRoot = obj.root;\n';
 		compiledTemplate += 'obj.root = function( env, context, frame, runtime, cb ) {\n';
 		compiledTemplate += '	var oldGetTemplate = env.getTemplate;\n';
-		compiledTemplate += '	env.getTemplate = function( name, ec, cb ) {\n';
+		compiledTemplate += '	env.getTemplate = function( name, ec, parentName, cb ) {\n';
 		compiledTemplate += '		if( typeof ec === "function" ) {\n';
 		compiledTemplate += '			cb = ec;\n';
 		compiledTemplate += '			ec = false;\n';
