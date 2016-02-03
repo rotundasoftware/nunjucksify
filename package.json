@@ -3,6 +3,9 @@
   "version": "0.2.2",
   "description": "nunjucks transform for browserify",
   "main": "index.js",
+  "browser": {
+    "nunjucksify/runtime-shim": "./runtime-shim.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/rotundasoftware/nunjucksify.git"

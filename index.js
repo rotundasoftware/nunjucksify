@@ -46,40 +46,7 @@ module.exports = function( file, opts ) {
 		}
 
 		compiledTemplate += 'var obj = (function () {' + nunjucksCompiledStr + '})();\n';
-		compiledTemplate += 'var oldRoot = obj.root;\n';
-		compiledTemplate += 'obj.root = function( env, context, frame, runtime, cb ) {\n';
-		compiledTemplate += '	var oldGetTemplate = env.getTemplate;\n';
-		compiledTemplate += '	env.getTemplate = function( name, ec, parentName, cb ) {\n';
-		compiledTemplate += '		if( typeof ec === "function" ) {\n';
-		compiledTemplate += '			cb = ec;\n';
-		compiledTemplate += '			ec = false;\n';
-		compiledTemplate += '		}\n';
-
-		compiledTemplate += '		var _require = function(name) {\n';
-		compiledTemplate += '			try {\n';
-		compiledTemplate += '				return require(name);\n';
-		compiledTemplate += '			} catch (e) {\n';
-		compiledTemplate += '				if ( frame.get( "_require" ) ) return frame.get( "_require" )( name )\n';
-		compiledTemplate += '			}\n';
-		compiledTemplate += '		};\n';
-		compiledTemplate += '		var tmpl = _require( name );\n';
-		compiledTemplate += '		frame.set( "_require", _require );\n';
-		compiledTemplate += '		if( ec ) tmpl.compile();\n';
-		compiledTemplate += '		cb( null, tmpl );\n';
-		compiledTemplate += '	};';
-
-		compiledTemplate += '	oldRoot( env, context, frame, runtime, function( err, res ) {\n';
-		compiledTemplate += '		env.getTemplate = oldGetTemplate;\n';
-		compiledTemplate += '		cb( err, res );\n';
-		compiledTemplate += '	} );\n';
-		compiledTemplate += '};\n';
-
-		compiledTemplate += 'var src = {\n';
-		compiledTemplate += '	obj: obj,\n';
-		compiledTemplate += '	type: "code"\n';
-		compiledTemplate += '};\n';
-
-		compiledTemplate += 'module.exports = new nunjucks.Template( src, env );\n';
+		compiledTemplate += 'module.exports = require( "nunjucksify/runtime-shim" )(nunjucks, env, obj, require);\n';
 
 		this.queue( compiledTemplate );
 		this.queue( null );
