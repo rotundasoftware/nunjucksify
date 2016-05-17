@@ -26,7 +26,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "nunjucks": "https://github.com/mozilla/nunjucks.git#165cb528bc62c482afc91158b3d365e2b27188ac",
+    "nunjucks": "https://github.com/dgbeck/nunjucks.git#68a456b3d80a0961f4fab8bc79c5c8a4e304246a",
     "through": "~2.3.4"
   },
   "devDependencies": {
