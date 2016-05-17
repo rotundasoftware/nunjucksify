@@ -1,6 +1,6 @@
 {
   "name": "nunjucksify",
-  "version": "0.2.3",
+  "version": "1.0.0",
   "description": "nunjucks transform for browserify",
   "main": "index.js",
   "browser": {
@@ -26,7 +26,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "nunjucks": "~1.3.4",
+    "nunjucks": "https://github.com/mozilla/nunjucks.git#165cb528bc62c482afc91158b3d365e2b27188ac",
     "through": "~2.3.4"
   },
   "devDependencies": {
