@@ -3,7 +3,7 @@ var path = require( 'path' );
 var assert = require( 'assert' );
 var through = require( 'through' );
 var browserify = require( 'browserify' );
-var jsdom = require( 'jsdom' ).jsdom;
+var jsdom = require( 'jsdom' );
 var nunjucksify = require( '..' );
 var nunjucks = require( 'nunjucks' );
 
@@ -12,49 +12,49 @@ it( 'Renders the same in node and in dom', function ( done ) {
   compareWithNunjucksRender( 'compare-with-nunjucks-render', done );
 });
 
-// it( 'Correctly extends block', function ( done ) {
-//   compareWithNunjucksRender( 'test-extends', done );
-// });
+it( 'Correctly extends block', function ( done ) {
+  compareWithNunjucksRender( 'test-extends', done );
+});
 
-// it( 'Correctly compiles recursive dependencies', function ( done ) {
-//   compareWithNunjucksRender( 'resolve-recursive-dependencies', done );
-// });
+it( 'Correctly compiles recursive dependencies', function ( done ) {
+  compareWithNunjucksRender( 'resolve-recursive-dependencies', done );
+});
 
-// it( 'Accepts custom file extension as string', function ( done ) {
-//   compareWithNunjucksRender( 'test-file-extension-config', done, {
-//     templateName: 'template.html',
-//     nunjucksify: {
-//       extension: '.html'
-//     }
-//   });
-// });
+it( 'Accepts custom file extension as string', function ( done ) {
+  compareWithNunjucksRender( 'test-file-extension-config', done, {
+    templateName: 'template.html',
+    nunjucksify: {
+      extension: '.html'
+    }
+  });
+});
 
-// describe( 'Accepts custom file extension as array', function ( done ) {
-//   compareWithNunjucksRender( 'test-file-extension-config', done, {
-//     templateName: 'template.html',
-//     nunjucksify: {
-//       extension: ['.html']
-//     }
-//   });
-// });
+it( 'Accepts custom file extension as array', function ( done ) {
+  compareWithNunjucksRender( 'test-file-extension-config', done, {
+    templateName: 'template.html',
+    nunjucksify: {
+      extension: ['.html']
+    }
+  });
+});
 
-// describe( 'Prevent duplicate require calls for the same template', function ( done ) {
-//   compileBundle('prevent-duplicate-require-calls', function ( err, bundleSource ) {
-//     var regExp = new RegExp( 'require\\( "\\./partial\\.nunj" \\);', 'g' );
-//     var matches = bundleSource.match( regExp );
-//     assert( matches );
-//     assert.equal( matches.length, 1 );
-//     done();
-//   });
-// });
+it( 'Prevent duplicate require calls for the same template', function ( done ) {
+  compileBundle('prevent-duplicate-require-calls', function ( err, bundleSource ) {
+    var regExp = new RegExp( 'require\\( "\\./partial\\.nunj" \\);', 'g' );
+    var matches = bundleSource.match( regExp );
+    assert( matches );
+    assert.equal( matches.length, 1 );
+    done();
+  });
+});
 
 
 function compareWithNunjucksRender( testName, done, opts ) {
+
   compileBundle( testName, function ( err, bundleSource ) {
-    console.log(typeof bundleSource);
-    jsdom.env( {
-      html : '<html><body></body></html>',
-      src : [ bundleSource ],
+    jsdom.jsdom.env( {
+      html : '<html><head></head><body></body></html>',
+      src: [bundleSource],
       done : function ( errors, window ) {
         if ( errors ) {
           return done( errors[0].data.error );

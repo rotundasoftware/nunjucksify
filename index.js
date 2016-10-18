@@ -28,7 +28,7 @@ module.exports = function( file, opts ) {
 		var nunjucksCompiledStr;
 
 		try {
-			nunjucksCompiledStr = nunjucks.precompileString(data, file);
+			nunjucksCompiledStr = nunjucks.precompileString(data, {name: file, env: env});
 		} catch( err ) {
 			this.queue( null );
 			return this.emit( 'error', err );
@@ -45,7 +45,8 @@ module.exports = function( file, opts ) {
 			}
 		}
 
-		compiledTemplate += 'var obj = (function () {' + nunjucksCompiledStr + '})();\n';
+		compiledTemplate += '(function () { ' + nunjucksCompiledStr + '})();\n';
+		compiledTemplate += 'var obj = (typeof global !== \'undefined\' ? global : window).nunjucksPrecompiled[\'' + file + '\'];\n';
 		compiledTemplate += 'module.exports = require( "nunjucksify/runtime-shim" )(nunjucks, env, obj, require);\n';
 
 		this.queue( compiledTemplate );
