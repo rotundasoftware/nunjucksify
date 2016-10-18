@@ -28,7 +28,7 @@ module.exports = function( file, opts ) {
 		var nunjucksCompiledStr;
 
 		try {
-			nunjucksCompiledStr = nunjucks.compiler.compile( data, env.asyncFilters, env.extensionsList );
+			nunjucksCompiledStr = nunjucks.precompileString(data, file);
 		} catch( err ) {
 			this.queue( null );
 			return this.emit( 'error', err );
@@ -37,7 +37,7 @@ module.exports = function( file, opts ) {
 		var reg = /env\.getTemplate\(\"(.*?)\"/g;
 		var match;
 		var required = {};
-		while( match = reg.exec( nunjucksCompiledStr ) ) {
+		while( (match = reg.exec( nunjucksCompiledStr )) ) {
 			var templateRef = match[1];
 			if (!required[templateRef]) {
 				compiledTemplate += 'require( "' + templateRef + '" );\n';

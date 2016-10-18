@@ -26,12 +26,12 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "nunjucks": "~1.3.4",
+    "nunjucks": "~2.5.2",
     "through": "~2.3.4"
   },
   "devDependencies": {
     "browserify": "^5.10.0",
     "jsdom": "^0.11.1",
-    "mocha": "^1.21.4"
+    "mocha": "^3.1.2"
   }
 }
