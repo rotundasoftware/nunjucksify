@@ -28,7 +28,7 @@ module.exports = function( file, opts ) {
 		var nunjucksCompiledStr;
 
 		try {
-			nunjucksCompiledStr = nunjucks.compiler.compile( data, env.asyncFilters, env.extensionsList );
+			nunjucksCompiledStr = nunjucks.precompileString(data, {name: file, env: env});
 		} catch( err ) {
 			this.queue( null );
 			return this.emit( 'error', err );
@@ -37,7 +37,7 @@ module.exports = function( file, opts ) {
 		var reg = /env\.getTemplate\(\"(.*?)\"/g;
 		var match;
 		var required = {};
-		while( match = reg.exec( nunjucksCompiledStr ) ) {
+		while( (match = reg.exec( nunjucksCompiledStr )) ) {
 			var templateRef = match[1];
 			if (!required[templateRef]) {
 				compiledTemplate += 'require( "' + templateRef + '" );\n';
@@ -45,7 +45,10 @@ module.exports = function( file, opts ) {
 			}
 		}
 
-		compiledTemplate += 'var obj = (function () {' + nunjucksCompiledStr + '})();\n';
+		var name = file.replace(/\\/g, '/');
+
+		compiledTemplate += '(function () { ' + nunjucksCompiledStr + '})();\n';
+		compiledTemplate += 'var obj = (typeof global !== \'undefined\' ? global : window).nunjucksPrecompiled[\'' + name + '\'];\n';
 		compiledTemplate += 'module.exports = require( "nunjucksify/runtime-shim" )(nunjucks, env, obj, require);\n';
 
 		this.queue( compiledTemplate );

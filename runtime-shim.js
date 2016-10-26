@@ -4,8 +4,19 @@ module.exports = function ( nunjucks, env, obj, __require ) {
 
 	obj.root = function( env, context, frame, runtime, cb ) {
 		var oldGetTemplate = env.getTemplate;
-		env.getTemplate = function( name, ec, parentName, cb ) {
+		env.getTemplate = function( name, ec, parentName, ignoreMissing, cb ) {
 			if( typeof ec === "function" ) {
+				cb = ec;
+				ec = false;
+			}
+
+			if(typeof parentName === 'function') {
+				cb = parentName;
+				parentName = null;
+				ec = ec || false;
+			}
+
+			if(typeof ec === 'function') {
 				cb = ec;
 				ec = false;
 			}

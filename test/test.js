@@ -3,24 +3,24 @@ var path = require( 'path' );
 var assert = require( 'assert' );
 var through = require( 'through' );
 var browserify = require( 'browserify' );
-var jsdom = require( 'jsdom' ).jsdom;
+var jsdom = require( 'jsdom' );
 var nunjucksify = require( '..' );
 var nunjucks = require( 'nunjucks' );
 
 
-specify( 'Renders the same in node and in dom', function ( done ) {
+it( 'Renders the same in node and in dom', function ( done ) {
   compareWithNunjucksRender( 'compare-with-nunjucks-render', done );
 });
 
-specify( 'Correctly extends block', function ( done ) {
+it( 'Correctly extends block', function ( done ) {
   compareWithNunjucksRender( 'test-extends', done );
 });
 
-specify( 'Correctly compiles recursive dependencies', function ( done ) {
+it( 'Correctly compiles recursive dependencies', function ( done ) {
   compareWithNunjucksRender( 'resolve-recursive-dependencies', done );
 });
 
-specify( 'Accepts custom file extension as string', function ( done ) {
+it( 'Accepts custom file extension as string', function ( done ) {
   compareWithNunjucksRender( 'test-file-extension-config', done, {
     templateName: 'template.html',
     nunjucksify: {
@@ -29,7 +29,7 @@ specify( 'Accepts custom file extension as string', function ( done ) {
   });
 });
 
-specify( 'Accepts custom file extension as array', function ( done ) {
+it( 'Accepts custom file extension as array', function ( done ) {
   compareWithNunjucksRender( 'test-file-extension-config', done, {
     templateName: 'template.html',
     nunjucksify: {
@@ -38,7 +38,7 @@ specify( 'Accepts custom file extension as array', function ( done ) {
   });
 });
 
-specify( 'Prevent duplicate require calls for the same template', function ( done ) {
+it( 'Prevent duplicate require calls for the same template', function ( done ) {
   compileBundle('prevent-duplicate-require-calls', function ( err, bundleSource ) {
     var regExp = new RegExp( 'require\\( "\\./partial\\.nunj" \\);', 'g' );
     var matches = bundleSource.match( regExp );
@@ -50,10 +50,11 @@ specify( 'Prevent duplicate require calls for the same template', function ( don
 
 
 function compareWithNunjucksRender( testName, done, opts ) {
+
   compileBundle( testName, function ( err, bundleSource ) {
-    jsdom.env( {
-      html : '<html><body></body></html>',
-      src : [ bundleSource ],
+    jsdom.jsdom.env( {
+      html : '<html><head></head><body></body></html>',
+      src: [bundleSource],
       done : function ( errors, window ) {
         if ( errors ) {
           return done( errors[0].data.error );
