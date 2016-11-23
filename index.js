@@ -7,6 +7,7 @@ module.exports = function( file, opts ) {
 	var env = opts.env || nunjucks.env || new nunjucks.Environment();
 	var extension = opts.extension || [ '.nunj', '.njk' ];
 	var rootDir = opts.rootDir;
+	var nodeOnly = opts.node || false;
 
 	if ( !(extension instanceof Array) ) extension = [extension];
 
@@ -21,18 +22,24 @@ module.exports = function( file, opts ) {
 	}
 
 	function end() {
+		var precompiledTemplateString;
 		var compiledTemplate = '';
-		
-		compiledTemplate += 'var nunjucks = require( "nunjucks/browser/nunjucks-slim" );\n';
-		
+
+		if (nodeOnly) {
+			compiledTemplate += 'var window = window || {}\n';
+			compiledTemplate += 'var nunjucks = require( "nunjucks" );\n';
+		} else {
+			compiledTemplate += 'var nunjucks = require( "nunjucks/browser/nunjucks-slim" );\n';
+		}
+
 		var templateName = file;
-		if( opts.rootDir ) templateName = path.relative( opts.rootDir, templateName );
-		
+		if( rootDir ) templateName = path.relative( rootDir, templateName );
+
 		precompiledTemplateString = nunjucks.precompileString( data, {
-            env : env,
-            name : templateName,
-            asFunction : true
-        } );
+			env : env,
+			name : templateName,
+			asFunction : true
+		} );
 
 		compiledTemplate += 'module.exports = ' + precompiledTemplateString + ';\n';
 
